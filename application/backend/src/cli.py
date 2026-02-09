@@ -74,6 +74,7 @@ def check_db() -> None:
 
 @cli.command()
 @click.option("--with-model", default=False)
+@click.option("--model-name", default="openvino_model", show_default=True)
 def seed(with_model: bool, model_name: str) -> None:
     """Seed the database with test data."""
     # If the app is running, it needs to be restarted since it doesn't track direct DB changes
