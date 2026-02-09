@@ -46,14 +46,17 @@ jobs:
       - name: Compute image metadata
         id: meta
         shell: bash
+        env:
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          TAG_INPUT: ${{ github.event.inputs.tag }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          OWNER_LC="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          OWNER_LC="$(echo "$REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
           IMAGE="ghcr.io/${OWNER_LC}/geti-inspect"
-          TAG_INPUT="${{ github.event.inputs.tag }}"
-          if [[ -z "${TAG_INPUT}" ]]; then
-            TAG_INPUT="${{ github.event.release.tag_name }}"
+          if [[ -z "$TAG_INPUT" ]]; then
+            TAG_INPUT="$RELEASE_TAG"
           fi
-          if [[ -z "${TAG_INPUT}" ]]; then
+          if [[ -z "$TAG_INPUT" ]]; then
             TAG_INPUT="sha-${GITHUB_SHA::12}"
           fi
 
