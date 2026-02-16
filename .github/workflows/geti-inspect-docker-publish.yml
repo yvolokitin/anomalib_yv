@@ -1,0 +1,78 @@
+name: Publish Geti Inspect Docker images
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional tag override (e.g. v1.2.3)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    name: Build and publish ${{ matrix.target }} image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: geti-inspect-cpu
+            suffix: cpu
+          - target: geti-inspect-xpu
+            suffix: xpu
+          - target: geti-inspect-cuda
+            suffix: cuda
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4f0d6dcd726f352ac2bbf2ad99ea5e63e3e9c65a # v3.11.1
+
+      - name: Log in to GHCR
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1 # v3.5.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image metadata
+        id: meta
+        shell: bash
+        env:
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          TAG_INPUT: ${{ github.event.inputs.tag }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          OWNER_LC="$(echo "$REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
+          IMAGE="ghcr.io/${OWNER_LC}/geti-inspect"
+          if [[ -z "$TAG_INPUT" ]]; then
+            TAG_INPUT="$RELEASE_TAG"
+          fi
+          if [[ -z "$TAG_INPUT" ]]; then
+            TAG_INPUT="sha-${GITHUB_SHA::12}"
+          fi
+
+          {
+            echo "image=${IMAGE}"
+            echo "version_tag=${TAG_INPUT}"
+            echo "sha_tag=sha-${GITHUB_SHA::12}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        uses: docker/build-push-action@8d4d7c0cc5fbfd3f0f79e4af4c1267dce6f87af9 # v6.18.0
+        with:
+          context: .
+          file: application/docker/Dockerfile
+          target: ${{ matrix.target }}
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.version_tag }}-${{ matrix.suffix }}
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}-${{ matrix.suffix }}
