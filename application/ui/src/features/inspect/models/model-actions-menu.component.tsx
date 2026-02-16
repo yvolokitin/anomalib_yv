@@ -33,7 +33,7 @@ export const ModelActionsMenu = ({ model, selectedModelId }: ModelActionsMenuPro
 
     const hasJobActions = Boolean(model.job?.id);
     const hasCompletedStatus = model.status === 'Completed';
-    const canDeleteModel = hasCompletedStatus && model.id !== selectedModelId;
+    const canDeleteModel = model.isPersisted && model.status !== 'Training' && model.id !== selectedModelId;
     const shouldShowMenu = hasJobActions || canDeleteModel;
 
     if (!shouldShowMenu) {

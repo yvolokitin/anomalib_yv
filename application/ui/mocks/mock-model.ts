@@ -24,6 +24,7 @@ export const getMockedModelData = (overrides: Partial<ModelData> = {}): ModelDat
     progress: 100,
     durationInSeconds: 120,
     sizeBytes: 52428800,
+    isPersisted: true,
     job: undefined,
     ...overrides,
 });
