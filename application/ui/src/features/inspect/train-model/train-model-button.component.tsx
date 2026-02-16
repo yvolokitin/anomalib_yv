@@ -40,7 +40,7 @@ export const TrainModelButton = () => {
         >
             {isDisabled ? (
                 <TooltipTrigger delay={300}>
-                    <span style={{ display: 'inline-flex', cursor: 'pointer' }}>
+                    <span style={{ display: 'inline-flex', cursor: 'pointer' }} title={tooltipMessage}>
                         <Button isDisabled UNSAFE_style={{ cursor: 'pointer' }}>
                             Train model
                         </Button>

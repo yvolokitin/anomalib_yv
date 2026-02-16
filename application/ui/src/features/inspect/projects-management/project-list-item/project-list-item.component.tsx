@@ -25,6 +25,7 @@ interface ProjectListItemProps {
     isInEditMode: boolean;
     isLastProject: boolean;
     setProjectInEdition: (projectId: string | null) => void;
+    onProjectSelected: () => void;
 }
 
 export const ProjectListItem = ({
@@ -33,6 +34,7 @@ export const ProjectListItem = ({
     isInEditMode,
     isLastProject,
     setProjectInEdition,
+    onProjectSelected,
 }: ProjectListItemProps) => {
     const navigate = useNavigate();
 
@@ -58,6 +60,7 @@ export const ProjectListItem = ({
         }
 
         navigate(`${paths.project({ projectId: project.id })}?mode=Dataset`);
+        onProjectSelected();
     };
 
     return (

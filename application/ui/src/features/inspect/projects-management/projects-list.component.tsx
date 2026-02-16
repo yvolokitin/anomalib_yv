@@ -17,6 +17,7 @@ interface ProjectListProps {
     hasNextPage: boolean;
     onLoadMore: () => void;
     setProjectInEdition: (projectId: string | null) => void;
+    onProjectSelected: () => void;
 }
 
 export const ProjectsList = ({
@@ -26,6 +27,7 @@ export const ProjectsList = ({
     projectIdInEdition,
     onLoadMore,
     setProjectInEdition,
+    onProjectSelected,
 }: ProjectListProps) => {
     const { projectId: currentProjectId } = useProjectIdentifier();
     const isInEditionMode = (projectId?: string) => {
@@ -45,6 +47,7 @@ export const ProjectsList = ({
                         isInEditMode={isInEditionMode(project.id)}
                         isActive={currentProjectId === project.id}
                         isLastProject={isLastProject}
+                        onProjectSelected={onProjectSelected}
                     />
                 ))}
             </ul>
