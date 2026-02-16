@@ -66,6 +66,8 @@ describe('ProjectListItem', () => {
     });
 
     it('navigates to project when clicked', async () => {
+        const onProjectSelected = vi.fn();
+
         renderWithRouting(
             <ProjectListItem
                 project={mockProject}
@@ -73,12 +75,14 @@ describe('ProjectListItem', () => {
                 isActive={false}
                 isLastProject={false}
                 setProjectInEdition={vi.fn()}
+                onProjectSelected={onProjectSelected}
             />
         );
 
         await userEvent.click(screen.getByRole('listitem'));
 
         expect(mockNavigate).toHaveBeenCalledWith('/projects/project-123?mode=Dataset');
+        expect(onProjectSelected).toHaveBeenCalled();
     });
 
     it('updates project name when edited', async () => {
@@ -99,6 +103,7 @@ describe('ProjectListItem', () => {
                 isInEditMode={true}
                 isLastProject={false}
                 setProjectInEdition={mockedSetProjectInEdition}
+                onProjectSelected={vi.fn()}
             />
         );
 
@@ -128,6 +133,7 @@ describe('ProjectListItem', () => {
                 isActive={false}
                 isLastProject={false}
                 setProjectInEdition={vi.fn()}
+                onProjectSelected={vi.fn()}
             />
         );
 
@@ -144,6 +150,7 @@ describe('ProjectListItem', () => {
                 isActive={false}
                 isLastProject={false}
                 setProjectInEdition={vi.fn()}
+                onProjectSelected={vi.fn()}
             />
         );
 
@@ -160,6 +167,7 @@ describe('ProjectListItem', () => {
                 isActive={false}
                 isLastProject={true}
                 setProjectInEdition={vi.fn()}
+                onProjectSelected={vi.fn()}
             />,
             { route: '/projects/other-project' }
         );

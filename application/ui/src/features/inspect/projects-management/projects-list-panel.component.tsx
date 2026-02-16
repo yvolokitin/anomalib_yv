@@ -52,37 +52,39 @@ export const ProjectsListPanel = () => {
     return (
         <DialogTrigger type='popover' hideArrow>
             <SelectedProjectButton name={selectedProjectName} id={selectedProject?.id} />
-
-            <Dialog width={'size-4600'} UNSAFE_className={styles.dialog}>
-                <Header>
-                    <Flex direction={'column'} justifyContent={'center'} width={'100%'} alignItems={'center'}>
-                        <ProjectThumbnail
-                            projectId={selectedProject?.id}
-                            projectName={selectedProjectName}
-                            size='size-1000'
+            {(close) => (
+                <Dialog width={'size-4600'} UNSAFE_className={styles.dialog}>
+                    <Header>
+                        <Flex direction={'column'} justifyContent={'center'} width={'100%'} alignItems={'center'}>
+                            <ProjectThumbnail
+                                projectId={selectedProject?.id}
+                                projectName={selectedProjectName}
+                                size='size-1000'
+                            />
+                            <Heading level={2} marginBottom={0}>
+                                {selectedProjectName}
+                            </Heading>
+                        </Flex>
+                    </Header>
+                    <Content>
+                        <Divider size={'S'} marginY={'size-200'} />
+                        <ProjectsList
+                            projects={projects}
+                            isLoading={isFetchingNextPage}
+                            hasNextPage={hasNextPage}
+                            onLoadMore={fetchNextPage}
+                            projectIdInEdition={projectInEdition}
+                            setProjectInEdition={setProjectInEdition}
+                            onProjectSelected={close}
                         />
-                        <Heading level={2} marginBottom={0}>
-                            {selectedProjectName}
-                        </Heading>
-                    </Flex>
-                </Header>
-                <Content>
-                    <Divider size={'S'} marginY={'size-200'} />
-                    <ProjectsList
-                        projects={projects}
-                        isLoading={isFetchingNextPage}
-                        hasNextPage={hasNextPage}
-                        onLoadMore={fetchNextPage}
-                        projectIdInEdition={projectInEdition}
-                        setProjectInEdition={setProjectInEdition}
-                    />
-                    <Divider size={'S'} marginY={'size-200'} />
-                </Content>
+                        <Divider size={'S'} marginY={'size-200'} />
+                    </Content>
 
-                <ButtonGroup UNSAFE_className={styles.panelButtons}>
-                    <AddProjectButton onSetProjectInEdition={setProjectInEdition} projectsCount={projects.length} />
-                </ButtonGroup>
-            </Dialog>
+                    <ButtonGroup UNSAFE_className={styles.panelButtons}>
+                        <AddProjectButton onSetProjectInEdition={setProjectInEdition} projectsCount={projects.length} />
+                    </ButtonGroup>
+                </Dialog>
+            )}
         </DialogTrigger>
     );
 };
