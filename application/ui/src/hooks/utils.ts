@@ -7,6 +7,7 @@ export interface ModelData {
     startTime: number;
     durationInSeconds: number | null;
     status: 'Training' | 'Completed' | 'Failed';
+    isPersisted: boolean;
     architecture: string;
     progress: number;
     job: SchemaJob | undefined;

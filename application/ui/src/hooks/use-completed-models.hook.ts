@@ -13,7 +13,6 @@ export const useCompletedModels = () => {
     const dateFormatter = useDateFormatter({ dateStyle: 'medium', timeStyle: 'short' });
 
     const models = useTrainedModels()
-        .filter((model) => model.is_ready)
         .map((model): ModelData | null => {
             const job = jobs.find(({ id }) => id === model.train_job_id);
             if (job === undefined) {
@@ -32,12 +31,13 @@ export const useCompletedModels = () => {
             return {
                 id: model.id!,
                 name: model.name!,
-                status: 'Completed',
+                status: model.is_ready ? 'Completed' : 'Failed',
                 architecture: model.name!,
                 startTime: start.getTime(),
                 timestamp,
                 durationInSeconds,
-                progress: 1.0,
+                progress: model.is_ready ? 1.0 : (job.progress ?? 0),
+                isPersisted: true,
                 job,
                 sizeBytes: model.size ?? null,
                 backbone: model.backbone ?? null,

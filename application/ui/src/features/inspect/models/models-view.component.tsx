@@ -65,6 +65,7 @@ export const ModelsView = ({ onModelSelect }: ModelsViewProps) => {
                 backbone: null,
                 job,
                 sizeBytes: null,
+                isPersisted: false,
             };
         });
 
