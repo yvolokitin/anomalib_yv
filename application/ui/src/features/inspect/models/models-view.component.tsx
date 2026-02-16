@@ -47,7 +47,7 @@ export const ModelsView = ({ onModelSelect }: ModelsViewProps) => {
     const completedModelsJobsIDs = new Set(models.map((model) => model.job?.id));
 
     const nonCompletedJobs = jobs
-        .filter((job) => !completedModelsJobsIDs.has(job.id))
+        .filter((job) => !completedModelsJobsIDs.has(job.id) && (job.status === 'pending' || job.status === 'running'))
         .map((job): ModelData => {
             const name = String(job.payload['model_name']);
 
@@ -56,7 +56,7 @@ export const ModelsView = ({ onModelSelect }: ModelsViewProps) => {
             return {
                 id: job.id!,
                 name,
-                status: job.status === 'pending' ? 'Training' : job.status === 'running' ? 'Training' : 'Failed',
+                status: 'Training',
                 architecture: name,
                 timestamp,
                 startTime: start.getTime(),
