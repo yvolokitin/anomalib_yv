@@ -38,15 +38,21 @@ export const TrainModelButton = () => {
                 </Button>
             }
         >
-            <DialogTrigger type='modal'>
-                <TooltipTrigger delay={300} isDisabled={!isDisabled}>
-                    <span>
-                        <Button isDisabled={isDisabled}>Train model</Button>
+            {isDisabled ? (
+                <TooltipTrigger delay={300}>
+                    <span style={{ display: 'inline-flex', cursor: 'pointer' }}>
+                        <Button isDisabled UNSAFE_style={{ cursor: 'pointer' }}>
+                            Train model
+                        </Button>
                     </span>
                     <Tooltip>{tooltipMessage}</Tooltip>
                 </TooltipTrigger>
-                {(close) => <TrainModelDialog close={close} />}
-            </DialogTrigger>
+            ) : (
+                <DialogTrigger type='modal'>
+                    <Button UNSAFE_style={{ cursor: 'pointer' }}>Train model</Button>
+                    {(close) => <TrainModelDialog close={close} />}
+                </DialogTrigger>
+            )}
         </Suspense>
     );
 };

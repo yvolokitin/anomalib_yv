@@ -62,7 +62,7 @@ export const UploadImages = () => {
 
     return (
         <FileTrigger allowsMultiple onSelect={captureImages}>
-            <Button variant='secondary'>Upload images</Button>
+            <Button variant='secondary' UNSAFE_style={{ cursor: 'pointer' }}>Upload images</Button>
         </FileTrigger>
     );
 };
